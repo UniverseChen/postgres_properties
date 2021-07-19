@@ -1,0 +1,18 @@
+[package]
+name = "postgres_properties_derive"
+version = "0.1.0"
+authors = ["UniverseChen <chenyzchn@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+proc_macro = true
+
+[dependencies]
+# A substitute implementation of the compiler's `proc_macro` API to decouple token-based libraries from the procedural macro use case
+proc-macro2 = "1.0"
+# Quasi-quoting macro quote!(...)
+quote = "1.0"
+# Parser for Rust source code
+syn = "1.0"

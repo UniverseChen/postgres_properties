@@ -43,6 +43,9 @@ pub fn derive(item: TokenStream) -> TokenStream {
                 fn comments() -> String {
                     #comments.to_string()
                 }
+                fn name_with_schema_sql() -> String {
+                    format!("\"{}\".\"{}\"", #schema, #name)
+                }
             }
     };
 

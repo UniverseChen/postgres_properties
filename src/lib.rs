@@ -21,6 +21,7 @@
 /// assert_eq!("tablespace".to_string(), S::tablespace());
 /// assert_eq!(false, S::partitioned_table());
 /// assert_eq!("comments".to_string(), S::comments());
+/// assert_eq!("\"schema\".\"table\"".to_string(), S::name_with_schema_sql());
 /// ```
 pub trait PgTableProperties {
     /// schema name
@@ -35,6 +36,8 @@ pub trait PgTableProperties {
     fn partitioned_table() -> bool;
     /// table's comments
     fn comments() -> String;
+    /// query table name
+    fn name_with_schema_sql() -> String;
 }
 
 pub extern crate postgres_properties_derive;

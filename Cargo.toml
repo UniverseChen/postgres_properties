@@ -1,10 +1,10 @@
 [package]
 name = "postgres_properties"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["UniverseChen <chenyzchn@gmail.com>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-postgres_properties_derive = { version = "0.1", path = "./postgres_properties_derive" }
+postgres_properties_derive = { version = "0.1.1", path = "./postgres_properties_derive" }

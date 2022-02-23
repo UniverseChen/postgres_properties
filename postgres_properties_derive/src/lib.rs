@@ -28,14 +28,26 @@ pub fn derive(item: TokenStream) -> TokenStream {
                 fn schema() -> String {
                     #schema.to_string()
                 }
+                fn schema_sql() -> String {
+                    format!(r#""{}""#, #schema)
+                }
                 fn name() -> String {
                     #name.to_string()
+                }
+                fn name_sql() -> String {
+                    format!(r#""{}""#, #name)
                 }
                 fn owner() -> String{
                     #owner.to_string()
                 }
+                fn owner_sql() -> String {
+                    format!(r#""{}""#, #owner)
+                }
                 fn tablespace() -> String {
                     #tablespace.to_string()
+                }
+                fn tablespace_sql() -> String {
+                    format!(r#""{}""#, #tablespace)
                 }
                 fn partitioned_table() -> bool {
                     #partitioned_table
@@ -44,7 +56,10 @@ pub fn derive(item: TokenStream) -> TokenStream {
                     #comments.to_string()
                 }
                 fn name_with_schema_sql() -> String {
-                    format!("\"{}\".\"{}\"", #schema, #name)
+                    format!(r#""{}"."{}""#, #schema, #name)
+                }
+                fn field_complete_sql(field: &str) -> String {
+                    format!(r#""{}"."{}"."{}""#, #schema, #name, field)
                 }
             }
     };

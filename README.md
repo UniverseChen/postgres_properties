@@ -39,10 +39,16 @@ use postgres_properties::PgTableProperties;
 struct S;
 
 assert_eq!("schema".to_string(), S::schema());
+assert_eq!(r#""schema""#.to_string(), S::schema_sql());
 assert_eq!("table".to_string(), S::name());
+assert_eq!(r#""table""#.to_string(), S::name_sql());
 assert_eq!("owner".to_string(), S::owner());
+assert_eq!(r#""owner""#.to_string(), S::owner_sql());
 assert_eq!("tablespace".to_string(), S::tablespace());
+assert_eq!(r#""tablespace""#.to_string(), S::tablespace_sql());
 assert_eq!(false, S::partitioned_table());
 assert_eq!("comments".to_string(), S::comments());
-		
+assert_eq!(r#""schema"."table""#.to_string(), S::name_with_schema_sql());
+assert_eq!(r#""schema"."table"."field""#.to_string(), S::field_complete_sql("field"));
+
 ```

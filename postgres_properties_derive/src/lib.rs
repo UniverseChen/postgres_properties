@@ -21,7 +21,7 @@ pub fn derive(item: TokenStream) -> TokenStream {
 
     let struct_name = &input.ident;
 
-    let (schema, name, owner, tablespace, partitioned_table, comments) = parse_table_attr(&input);
+    let (schema, table, owner, tablespace, partitioned_table, comments) = parse_table_attr(&input);
 
     let implemented_show = quote! {
             impl PgTableProperties for #struct_name {
@@ -31,11 +31,11 @@ pub fn derive(item: TokenStream) -> TokenStream {
                 fn schema_sql() -> String {
                     format!(r#""{}""#, #schema)
                 }
-                fn name() -> String {
-                    #name.to_string()
+                fn table() -> String {
+                    #table.to_string()
                 }
-                fn name_sql() -> String {
-                    format!(r#""{}""#, #name)
+                fn table_sql() -> String {
+                    format!(r#""{}""#, #table)
                 }
                 fn owner() -> String{
                     #owner.to_string()
@@ -55,11 +55,11 @@ pub fn derive(item: TokenStream) -> TokenStream {
                 fn comments() -> String {
                     #comments.to_string()
                 }
-                fn name_with_schema_sql() -> String {
-                    format!(r#""{}"."{}""#, #schema, #name)
+                fn schema_table_sql() -> String {
+                    format!(r#""{}"."{}""#, #schema, #table)
                 }
-                fn field_complete_sql(field: &str) -> String {
-                    format!(r#""{}"."{}"."{}""#, #schema, #name, field)
+                fn schema_table_field_sql(field: &str) -> String {
+                    format!(r#""{}"."{}"."{}""#, #schema, #table, field)
                 }
             }
     };
@@ -99,7 +99,7 @@ fn get_mapper_meta_items(attr: &syn::Attribute) -> Option<Vec<syn::NestedMeta>> 
 
 fn parse_table_attr(ast: &DeriveInput) -> (String, String, String, String, bool, String) {
     let mut schema = None;
-    let mut name = None;
+    let mut table = None;
     let mut owner = None;
     let mut tablespace = None;
     let mut partitioned_table = None;
@@ -113,9 +113,9 @@ fn parse_table_attr(ast: &DeriveInput) -> (String, String, String, String, bool,
                         schema = Some(s.value());
                     }
                 }
-                Meta(NameValue(ref m)) if m.path.is_ident("name") => {
+                Meta(NameValue(ref m)) if m.path.is_ident("table") => {
                     if let Ok(s) = get_lit_str(m.path.get_ident(), &m.lit) {
-                        name = Some(s.value());
+                        table = Some(s.value());
                     }
                 }
                 Meta(NameValue(ref m)) if m.path.is_ident("owner") => {
@@ -156,7 +156,7 @@ fn parse_table_attr(ast: &DeriveInput) -> (String, String, String, String, bool,
 
     (
         schema.expect("declare general: #[general(schema = \"schema_name\")]"),
-        name.expect("declare general: #[general(name = \"table_name\")]"),
+        table.expect("declare general: #[general(table = \"table_name\")]"),
         owner.expect("declare general: #[general(owner = \"owner_name\")]"),
         tablespace.expect("declare general: #[general(tablespace = \"tablespace_name\")]"),
         partitioned_table.expect("declare general: #[general(partitioned_table = \"false\")]"),
